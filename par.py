@@ -814,6 +814,7 @@ class allRead:
                 if '107' in filerecords:
                     recordlist.append('107')
             else:
+                recordlist = [str(n) for n in recordlist] # Support records as numbers
                 for n in recordlist:
                     if n not in filerecords:
                         recordlist.remove(n)
