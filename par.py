@@ -137,8 +137,24 @@ class allRead:
                 os.remove(navfilename)
             except:
                 pass
-            
-        
+
+    def __enter__(self):
+        """
+        Start function for with statement
+        Now this will work:
+        with allRead(file):
+                 ....
+
+        The file will be closed automatically
+        """
+        return self
+
+    def __exit__(self,*args):
+        """
+        Exit function for with statement
+        """
+        self.close()
+
     def read(self):
         """
         Reads the header.
