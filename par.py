@@ -130,8 +130,8 @@ class allRead:
         """
         self.infile.close()
         if clean:
-            mapfilename = self.infilename[:-3] + 'par'
-            navfilename = self.infilename[:-3] + 'nav'
+            mapfilename = self.infilename + '.par'
+            navfilename = self.infilename + '.nav'
             try:
                 os.remove(mapfilename)
                 os.remove(navfilename)
