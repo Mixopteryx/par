@@ -4698,7 +4698,20 @@ def _assign_speed_bins(speeds, speed_bins, diff_from_bin = 0.5):
             used_speeds.append(sb)
     # find the indicies where accelerations were lower.
     return np.array(sb_idx), used_speeds
-       
+
+def _checksum_all_bytes(bytes):
+    # Calculate checksum by sum of bytes method
+    bytes = bytearray(bytes)
+    chk = sum(bytes) % 2**16
+    return np.uint16(chk)
+
+def checksum_rawdatablock(rawdatablock):
+    # checksum for bytes between STX and ETX
+    # Assuming that the format of the datablock is:
+    # 4 bytes datagram size, 1 byte STX -- DATA -- 1 byte ETX, 2 byte checksum
+    # I.e. 5 bytes excluded at start and 3 bytes at the end
+    return _checksum_all_bytes(rawdatablock[5:-3])
+
 def main():        
     if len(sys.argv) > 1:
         a = allRead(sys.argv[1])
