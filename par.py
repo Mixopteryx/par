@@ -4854,7 +4854,8 @@ def _assign_speed_bins(speeds, speed_bins, diff_from_bin = 0.5):
             used_speeds.append(sb)
     # find the indicies where accelerations were lower.
     return np.array(sb_idx), used_speeds
-    
+
+
 def summarize_directory(directory = '.'):
     """
     Print a summary of all the lines in the directory.
@@ -4872,7 +4873,7 @@ def summarize_directory(directory = '.'):
             info[n] = infile.get_stats(False)
         return info
     else:
-        return none
+        return None
 
 def _checksum_all_bytes(bytes):
     # Calculate checksum by sum of bytes method
