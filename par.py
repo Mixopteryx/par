@@ -1106,7 +1106,7 @@ class BaseData(object):
         """
         try:
             raw_dtype = self.raw_dtype
-        except:
+        except AttributeError:
             raw_dtype = self.hdr_dtype
         if read_limit is None:
             read_limit = 0
@@ -1130,7 +1130,7 @@ class BaseData(object):
             data = self.header
         try:
             raw_dtype = self.raw_dtype
-        except:
+        except AttributeError:
             raw_dtype = self.hdr_dtype
         tmp = data.astype(raw_dtype)
         datablock = str(np.getbuffer(tmp))  # FIXME: will this work in python 3.x ????
@@ -1260,7 +1260,7 @@ class Data49(BaseData):
         self.header['YawStabAngle'] *= 0.01
 
     def make_datablock(self, data=None):
-        # Must convert the units back first then breate the buffer
+        # Must convert the units back first then create the buffer
         tmp_header = self.header.copy()
         tmp_header['PingRate'] *= 100
         tmp_header['LastHeading'] *= 100
@@ -1795,7 +1795,7 @@ class Data68(BaseData):
         self.header[4] *= 0.01
         self.header[7] *= 0.01
         self.header[8] *= 0.01
-        self.header[-1] *= 4    # revisit this number... it makes the range work but may not be correct
+        self.header[-1] *= 4    # FIXME: revisit this number... it makes the range work but may not be correct
         self.depthoffsetmultiplier = np.frombuffer(datablock[-1:], dtype='b')[0] * 65536
         self.header[4] += self.depthoffsetmultiplier
         self.xyz = Data68_xyz(datablock[self.hdr_sz:-1], self.header, byteswap=byteswap)
@@ -1809,7 +1809,7 @@ class Data68(BaseData):
         tmp_header.header[4] *= 100
         tmp_header.header[7] *= 100
         tmp_header.header[8] *= 10
-        tmp_header.header[-1] /= 4    # revisit this number... it makes the range work but may not be correct
+        tmp_header.header[-1] /= 4    # FIXME: revisit this number... it makes the range work but may not be correct
         part1 = super(Data68, self).make_datablock(tmp_header)
         part2 = self.xyz.make_datablock()
         part3 = str(np.frombuffer([self.depthoffsetmultiplier / 65536], dtype='b'))
