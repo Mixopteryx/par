@@ -333,7 +333,10 @@ class allRead:
             recordsremaining.pop(ping.header['Datagram#']-1)
             totalsamples, subbeams = ping.ampdata.shape
             rx = np.zeros(numbeams, dtype = Data107.nrx_dtype)
-            ampdata = np.zeros((totalsamples, numbeams), dtype = np.float32)
+            # Initialize array to NANs. Source:http://stackoverflow.com/a/1704853/1982894
+            ampdata = np.empty((totalsamples, numbeams), dtype = np.float32)
+            ampdata.fill(np.NAN)
+
             rx[:subbeams] = ping.rx
             ampdata[:,:subbeams] = ping.ampdata
             beamcount = subbeams
@@ -344,7 +347,8 @@ class allRead:
                     recordsremaining.pop(recordnumber)
                     numsamples, subbeams = ping.ampdata.shape
                     if numsamples > totalsamples:
-                        temp = np.zeros((numsamples - totalsamples, numbeams), dtype = 'b')
+                        temp = np.empty((numsamples - totalsamples, numbeams), dtype = np.float32)
+                        temp.fill(np.NAN)
                         ampdata = np.append(ampdata, temp, axis = 0)
                         totalsamples = numsamples
                     rx[beamcount:beamcount+subbeams] = ping.rx
@@ -2668,7 +2672,9 @@ class Data107:
         # declare amplitudes stuff
         numamp = len(datablock) - ntx_sz * ntx - nrx_sz * nrx
         amp_dtype = np.dtype([('SampleAmplitude',"b")])
-        tempamp = np.zeros(numamp, dtype = amp_dtype)
+        # Initialize array to NANs. Source:http://stackoverflow.com/a/1704853/1982894
+        tempamp = np.empty(numamp, dtype = amp_dtype)
+        tempamp[:] = np.NAN
         # get the tx data
         self.tx = np.frombuffer(datablock[:ntx*ntx_sz], dtype = ntx_dtype)
         p = ntx*ntx_sz
@@ -2691,8 +2697,8 @@ class Data107:
         self.rx['BeamPointingAngle'] *= 0.01
         # unwined the beam data into an array
         numsamples = self.rx['NumberSamples']
-        self.ampdata = np.zeros((numsamples.max(), nrx), dtype = np.float32)
-        self.ampdata[:,:] = np.nan
+        self.ampdata = np.empty((numsamples.max(), nrx), dtype = np.float32)
+        self.ampdata[:] = np.NAN
         pamp = 0
         for n in range(nrx):
             self.ampdata[:numsamples[n],n] = 0.5*tempamp[pamp:pamp+numsamples[n]].astype(np.float32)
