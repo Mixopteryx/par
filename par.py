@@ -329,6 +329,11 @@ class allRead:
             inx = np.nonzero(self.map.packdir['107'][:,3] == pingnum)[0]
             ping = self.getrecord(107,inx[0])
             numbeams = ping.header['Total#Beams']
+            if not len(inx)==ping.header['#OfDatagrams']:
+                raise RuntimeError(
+                    "Expected number of water column datagrams in ping are {0}, but {1} datagrams found.".format(
+                        str(ping.header['#OfDatagrams']), str(len(inx))))
+
             recordsremaining = range(ping.header['#OfDatagrams'])
             recordsremaining.pop(ping.header['Datagram#']-1)
             totalsamples, subbeams = ping.ampdata.shape
