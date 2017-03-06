@@ -319,7 +319,10 @@ class allRead:
         # dt is for looking for packets with different time stamps.
         if not self.mapped:
             self.mapfile()
-        pinglist = list(set(self.map.packdir['107'][:,3]))
+        if '107' in self.map.packdir:
+                pinglist = list(set(self.map.packdir['107'][:,3]))
+        else:
+            raise RuntimeError('No watercolumn data found')
         pinglist.sort()
         if recordnum >= len(pinglist):
             print str(len(pinglist)) + ' water column records available.'
