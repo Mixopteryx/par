@@ -332,7 +332,7 @@ class allRead:
             recordsremaining = range(ping.header['#OfDatagrams'])
             recordsremaining.pop(ping.header['Datagram#']-1)
             totalsamples, subbeams = ping.ampdata.shape
-            rx = np.zeros(numbeams, dtype = Data107.nrx_dtype)
+            rx = np.zeros(numbeams, dtype = Data107_nrx.hdr_dtype)
             # Initialize array to NANs. Source:http://stackoverflow.com/a/1704853/1982894
             ampdata = np.empty((totalsamples, numbeams), dtype = np.float32)
             ampdata.fill(np.NAN)
