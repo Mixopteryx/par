@@ -2635,7 +2635,7 @@ class Data107_nrx(BaseData):
         if read_limit is None:
             raise Exception("Must specify a number of rx datagrams to read")
         p = 0  # pointer to where we are in the datablock
-        nrx_sz = self.hdr_size
+        nrx_sz = self.hdr_sz
         nrx = read_limit
         self.header = np.zeros(nrx, dtype=self.raw_dtype)
 
