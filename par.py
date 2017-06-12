@@ -1002,6 +1002,14 @@ class Datagram:
         if not self.__dict__.has_key('time'):
             self.maketime()
         return self.time
+
+    def gettimestr(self):
+        """
+        Make a human readable string based on the POSIX time stamp from maketime
+        """
+        date_format = "%Y.%m.%d %H:%M:%S.%f"
+        t = dtm.datetime.utcfromtimestamp(self.gettime())
+        return t.strftime(date_format)[:-3] # [:-3] removed 3 last decimals
         
     def display(self):
         """
