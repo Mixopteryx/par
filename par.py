@@ -1015,9 +1015,14 @@ class Datagram:
         """
         Displays contents of the header to the command window.
         """
-        for n,name in enumerate(self.header.dtype.names):
-            print name + ' : ' + str(self.header[n])
+        print(self.__repr__)
 
+    def get_display_string(self):
+        """ Displays contents of the header to the command window. """
+        return _get_display_string(self.header)
+
+    def __repr__(self):
+        return self.get_display_string()
 
 class BaseMeta(type):
     """metaclass to read the "hdr_dtype" attribute and convert it into usable attribute names"""
@@ -1176,10 +1181,7 @@ class BaseData(object):
 
     def get_display_string(self):
         """ Displays contents of the header to the command window. """
-        result = ""
-        for n, name in enumerate(self.header.dtype.names):
-            result += name + ' : ' + str(self.header[name]) + "\n"
-        return result
+        return _get_display_string(self.header)
 
     def display(self):
         print self.__repr__()
@@ -5276,6 +5278,13 @@ def plot_all_nav(directory = '.'):
         if n >= len(clist):
             n = 0
         plt.draw()
+
+def _get_display_string(header):
+    """ Displays contents of the header to the command window. """
+    result = ""
+    for n, name in enumerate(header.dtype.names):
+        result += name + ' : ' + str(header[name]) + "\n"
+    return result
 
 def _checksum_all_bytes(bytes):
     # Calculate checksum by sum of bytes method
